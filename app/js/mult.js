@@ -5,7 +5,7 @@ var helloText = function () {
 function getPairs(n) {
     var r = [];
 
-    for (var x = 2; x < n; x++) {
+    for (var x = 2; x <= n; x++) {
         for (var y = 2; y <= x; y++) {
             r.push({x: x, y: y});
         }
@@ -13,7 +13,8 @@ function getPairs(n) {
 
     return r;
 }
-var init = function () {
+
+function start(limit) {
     function next() {
         ++p;
     }
@@ -53,18 +54,17 @@ var init = function () {
         }
     }
 
-    var limit = 5;
     var pairs = _.shuffle(getPairs(limit));
     var p = 0;
 
-    $('body').append(JST['app/templates/hello.us']({
+    $('body').append(JST['app/templates/table.us']({
         x: 0, y: 0
     }));
 
-    for (var i = 1; i < limit; i++) {
+    for (var i = 1; i <= limit; i++) {
         var row = $('<tr></tr>').appendTo('table');
 
-        for (var j = 1; j < limit; j++) {
+        for (var j = 1; j <= limit; j++) {
             $('<td>' + (i * j) + '</td>')
                 .addClass('row' + i)
                 .addClass('col' + j)
@@ -75,6 +75,17 @@ var init = function () {
     $('td').addClass('remaining');
     $('td.row1').removeClass('remaining');
     $('td.col1').removeClass('remaining');
-    $("#answer").keyup(checkAnswer);
+    $("#answer").focus().keyup(checkAnswer);
     updateQuestion();
-};
+}
+
+function init() {
+    $('body').append(JST['app/templates/start.us']({
+        x: 0, y: 0
+    }));
+
+    $('input#start').click(function () {
+        $('form').hide();
+        start($('input#to').val());
+    });
+}

@@ -1,0 +1,7 @@
+<form>
+    <span class="from"> 2 </span>
+    –
+    <input type="number" id="to" value="9">
+    <input type="button" id="start" value="Start">
+</form>
+
