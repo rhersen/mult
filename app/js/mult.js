@@ -1,7 +1,3 @@
-var helloText = function () {
-    return 'Hello, World!';
-};
-
 function getPairs(n) {
     var r = [];
 
@@ -16,15 +12,15 @@ function getPairs(n) {
 
 function start(limit) {
     function next() {
-        ++p;
+        ++i;
     }
 
     function x() {
-        return pairs[p].x;
+        return pairs[i].x;
     }
 
     function y() {
-        return pairs[p].y;
+        return pairs[i].y;
     }
 
     function isCorrect(answer) {
@@ -54,27 +50,31 @@ function start(limit) {
         }
     }
 
-    var pairs = _.shuffle(getPairs(limit));
-    var p = 0;
+    function createTable() {
+        $('body').append(JST['app/templates/table.us']({
+            x: 0, y: 0
+        }));
 
-    $('body').append(JST['app/templates/table.us']({
-        x: 0, y: 0
-    }));
+        for (var i = 1; i <= limit; i++) {
+            var row = $('<tr></tr>').appendTo('table');
 
-    for (var i = 1; i <= limit; i++) {
-        var row = $('<tr></tr>').appendTo('table');
-
-        for (var j = 1; j <= limit; j++) {
-            $('<td>' + (i * j) + '</td>')
-                .addClass('row' + i)
-                .addClass('col' + j)
-                .appendTo(row);
+            for (var j = 1; j <= limit; j++) {
+                $('<td>' + (i * j) + '</td>')
+                    .addClass('row' + i)
+                    .addClass('col' + j)
+                    .appendTo(row);
+            }
         }
+
+        $('td').addClass('remaining');
+        $('td.row1').removeClass('remaining');
+        $('td.col1').removeClass('remaining');
     }
 
-    $('td').addClass('remaining');
-    $('td.row1').removeClass('remaining');
-    $('td.col1').removeClass('remaining');
+    var i = 0;
+    var pairs = _.shuffle(getPairs(limit));
+
+    createTable();
     $("#answer").focus().keyup(checkAnswer);
     updateQuestion();
 }
