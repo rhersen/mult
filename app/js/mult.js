@@ -12,7 +12,7 @@ function getPairs(n) {
 
 function start(limit) {
     function next() {
-        ++i;
+        return ++i < pairs.length;
     }
 
     function x() {
@@ -45,8 +45,11 @@ function start(limit) {
     function checkAnswer() {
         if (isCorrect($(this).val())) {
             showAnswer();
-            next();
-            updateQuestion();
+            if (next()) {
+                updateQuestion();
+            } else {
+                alert('Klart!');
+            }
         }
     }
 
@@ -79,13 +82,16 @@ function start(limit) {
     updateQuestion();
 }
 
-function init() {
-    $('body').append(JST['app/templates/start.us']({
-        x: 0, y: 0
-    }));
+function handleSubmit() {
+    $(this).hide();
+    start($('input#to').val());
+    return false;
+}
 
-    $('input#start').click(function () {
-        $('form').hide();
-        start($('input#to').val());
+function init() {
+    var form = JST['app/templates/start.us']({
+        x: 0, y: 0
     });
+
+    $(form).submit(handleSubmit).appendTo('body')
 }
