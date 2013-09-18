@@ -18,48 +18,6 @@ function start(limit) {
     $("#answer").focus().keyup(checkAnswer);
     updateQuestion();
 
-    function next() {
-        return ++i < pairs.length;
-    }
-
-    function x() {
-        return pairs[i].x;
-    }
-
-    function y() {
-        return pairs[i].y;
-    }
-
-    function isCorrect(answer) {
-        return answer === '' + (x() * y());
-    }
-
-    function updateQuestion() {
-        $('.factor-x').text(x());
-        $('.factor-y').text(y());
-        $('#answer').val('');
-    }
-
-    function showAnswer() {
-        show(x(), y());
-        show(y(), x());
-
-        function show(row, col) {
-            $('td.row' + row + '.col' + col).removeClass('remaining');
-        }
-    }
-
-    function checkAnswer() {
-        if (isCorrect($(this).val())) {
-            showAnswer();
-            if (next()) {
-                updateQuestion();
-            } else {
-                alert('Klart!');
-            }
-        }
-    }
-
     function createTable() {
         $('body').append(JST['app/templates/table.us']({
             x: 0, y: 0
@@ -79,6 +37,48 @@ function start(limit) {
         $('td').addClass('remaining');
         $('td.row1').removeClass('remaining');
         $('td.col1').removeClass('remaining');
+    }
+
+    function checkAnswer() {
+        if (isCorrect($(this).val())) {
+            showAnswer();
+            if (next()) {
+                updateQuestion();
+            } else {
+                alert('Klart!');
+            }
+        }
+
+        function isCorrect(answer) {
+            return answer === '' + (x() * y());
+        }
+
+        function showAnswer() {
+            show(x(), y());
+            show(y(), x());
+
+            function show(row, col) {
+                $('td.row' + row + '.col' + col).removeClass('remaining');
+            }
+        }
+
+        function next() {
+            return ++i < pairs.length;
+        }
+    }
+
+    function updateQuestion() {
+        $('.factor-x').text(x());
+        $('.factor-y').text(y());
+        $('#answer').val('');
+    }
+
+    function x() {
+        return pairs[i].x;
+    }
+
+    function y() {
+        return pairs[i].y;
     }
 }
 
