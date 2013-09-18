@@ -11,6 +11,13 @@ function getPairs(n) {
 }
 
 function start(limit) {
+    var i = 0;
+    var pairs = _.shuffle(getPairs(limit));
+
+    createTable();
+    $("#answer").focus().keyup(checkAnswer);
+    updateQuestion();
+
     function next() {
         return ++i < pairs.length;
     }
@@ -34,12 +41,12 @@ function start(limit) {
     }
 
     function showAnswer() {
+        show(x(), y());
+        show(y(), x());
+
         function show(row, col) {
             $('td.row' + row + '.col' + col).removeClass('remaining');
         }
-
-        show(x(), y());
-        show(y(), x());
     }
 
     function checkAnswer() {
@@ -73,19 +80,6 @@ function start(limit) {
         $('td.row1').removeClass('remaining');
         $('td.col1').removeClass('remaining');
     }
-
-    var i = 0;
-    var pairs = _.shuffle(getPairs(limit));
-
-    createTable();
-    $("#answer").focus().keyup(checkAnswer);
-    updateQuestion();
-}
-
-function handleSubmit() {
-    $(this).hide();
-    start($('input#to').val());
-    return false;
 }
 
 function init() {
@@ -93,5 +87,11 @@ function init() {
         x: 0, y: 0
     });
 
-    $(form).submit(handleSubmit).appendTo('body')
+    $(form).submit(handleSubmit).appendTo('body');
+
+    function handleSubmit() {
+        $(this).hide();
+        start($('input#to').val());
+        return false;
+    }
 }
