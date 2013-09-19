@@ -12,6 +12,7 @@ function getPairs(n) {
 
 function start(pairs, limit) {
     var i = 0;
+    var millis = new Date().getTime();
 
     createTable();
     $("#answer").focus().keyup(function () {
@@ -47,7 +48,7 @@ function start(pairs, limit) {
                 updateQuestion();
             } else {
                 $('body').append(JST['app/templates/score.us']({
-                    time: 47.11
+                    time: (new Date().getTime() - millis) * 1e-3
                 }));
 
                 $('#game').remove();
