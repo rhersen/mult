@@ -46,7 +46,12 @@ function start(pairs, limit) {
             if (next()) {
                 updateQuestion();
             } else {
-                alert('Klart!');
+                $('body').append(JST['app/templates/score.us']({
+                    time: 47.11
+                }));
+
+                $('#game').remove();
+                $('form').show();
             }
         }
         function isCorrect(answer) {
@@ -95,6 +100,7 @@ function init() {
 
     function handleSubmit() {
         $(this).hide();
+        $('.score').remove();
         startRandom($('input#to').val());
         return false;
     }

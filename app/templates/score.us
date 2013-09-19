@@ -1,0 +1,4 @@
+<div class="score">
+    <p>Du klarade multiplikationstabellen på <%= time %> sekunder!</p>
+</div>
+

@@ -1,9 +1,11 @@
-<div>
-    <span class="factor-x"> <%= x %> </span>
-    ×
-    <span class="factor-y"> <%= y %> </span>
-    =
-    <input autofocus="autofocus" type="number" id="answer">
+<div id="game">
+    <div>
+        <span class="factor-x"> <%= x %> </span>
+        ×
+        <span class="factor-y"> <%= y %> </span>
+        =
+        <input autofocus="autofocus" type="number" id="answer">
+    </div>
+    <table>
+    </table>
 </div>
-<table>
-</table>
