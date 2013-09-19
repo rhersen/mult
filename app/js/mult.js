@@ -10,12 +10,13 @@ function getPairs(n) {
     return r;
 }
 
-function start(limit) {
+function start(pairs, limit) {
     var i = 0;
-    var pairs = _.shuffle(getPairs(limit));
 
     createTable();
-    $("#answer").focus().keyup(checkAnswer);
+    $("#answer").focus().keyup(function () {
+        checkAnswer($(this).val());
+    });
     updateQuestion();
 
     function createTable() {
@@ -39,8 +40,8 @@ function start(limit) {
         $('td.col1').removeClass('remaining');
     }
 
-    function checkAnswer() {
-        if (isCorrect($(this).val())) {
+    function checkAnswer(answer) {
+        if (isCorrect(answer)) {
             showAnswer();
             if (next()) {
                 updateQuestion();
@@ -48,7 +49,6 @@ function start(limit) {
                 alert('Klart!');
             }
         }
-
         function isCorrect(answer) {
             return answer === '' + (x() * y());
         }
@@ -82,6 +82,10 @@ function start(limit) {
     }
 }
 
+function startRandom(limit) {
+    start(_.shuffle(getPairs(limit)), limit);
+}
+
 function init() {
     var form = JST['app/templates/start.us']({
         x: 0, y: 0
@@ -91,7 +95,7 @@ function init() {
 
     function handleSubmit() {
         $(this).hide();
-        start($('input#to').val());
+        startRandom($('input#to').val());
         return false;
     }
 }
