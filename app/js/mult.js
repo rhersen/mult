@@ -47,8 +47,14 @@ function start(pairs, limit) {
             if (next()) {
                 updateQuestion();
             } else {
+                var score = new Date().getTime() - millis;
+                $.ajax({
+                    url: 'http://mult.hersen.name/score',
+                    type: 'PUT',
+                    data: {score: score}
+                });
                 $('body').append(JST['app/templates/score.us']({
-                    time: (new Date().getTime() - millis) * 1e-3
+                    time: score * 1e-3
                 }));
 
                 $('#game').remove();
