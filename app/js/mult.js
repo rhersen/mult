@@ -49,9 +49,10 @@ function start(pairs, limit) {
             } else {
                 var score = new Date().getTime() - millis;
                 $.ajax({
+                    type: 'POST',
                     url: 'http://mult.hersen.name/score',
-                    type: 'PUT',
-                    data: {score: score}
+                    data: JSON.stringify({score: score}),
+                    contentType: 'application/json'
                 });
                 $('body').append(JST['app/templates/score.us']({
                     time: score * 1e-3
