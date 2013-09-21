@@ -12,7 +12,7 @@ function getPairs(n) {
 
 function start(pairs, limit) {
     var i = 0;
-    var millis = new Date().getTime();
+    var startMillis = new Date().getTime();
 
     createTable();
     $("#answer").focus().keyup(function () {
@@ -47,15 +47,23 @@ function start(pairs, limit) {
             if (next()) {
                 updateQuestion();
             } else {
-                var score = new Date().getTime() - millis;
+                var endMillis = new Date().getTime();
+                var elapsed = endMillis - startMillis;
+
                 $.ajax({
                     type: 'POST',
                     url: 'http://mult.hersen.name/score',
-                    data: JSON.stringify({score: score}),
+                    data: JSON.stringify({
+                        score: elapsed,
+                        level: limit,
+                        name: '-',
+                        timestamp: endMillis
+                    }),
                     contentType: 'application/json'
                 });
+
                 $('body').append(JST['app/templates/score.us']({
-                    time: score * 1e-3
+                    time: elapsed * 1e-3
                 }));
 
                 $('#game').remove();
