@@ -52,7 +52,7 @@ function start(pairs, limit) {
 
                 $.ajax({
                     type: 'POST',
-                    url: 'http://mult.hersen.name/score',
+                    url: '/score',
                     data: JSON.stringify({
                         score: elapsed,
                         level: limit,
