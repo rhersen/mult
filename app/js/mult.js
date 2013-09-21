@@ -117,7 +117,7 @@ function init() {
     function handleSubmit() {
         $(this).hide();
         $('.score').remove();
-        startRandom($('input#to').val());
+        startRandom(parseInt($('input#to').val(), 10));
         return false;
     }
 }
