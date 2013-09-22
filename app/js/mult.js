@@ -105,7 +105,7 @@ function startRandom(limit) {
 }
 
 function getHighscoreList() {
-    $.get('/score/_all_docs', { include_docs: true }, showHighscoreList);
+    $.getJSON('/score/_all_docs', { include_docs: true }, showHighscoreList);
 
     function showHighscoreList(data) {
         var highscoreList = JST['app/templates/highscorelist.us']({
