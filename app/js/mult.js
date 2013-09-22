@@ -50,17 +50,14 @@ function start(pairs, limit) {
                 var endMillis = new Date().getTime();
                 var elapsed = endMillis - startMillis;
 
-                $.ajax({
-                    type: 'POST',
-                    url: '/score',
-                    data: JSON.stringify({
+                $.post('/score',
+                    JSON.stringify({
                         score: elapsed,
                         level: limit,
                         name: '-',
                         timestamp: endMillis
                     }),
-                    contentType: 'application/json'
-                });
+                    getHighscoreList);
 
                 $('body').append(JST['app/templates/score.us']({
                     time: elapsed * 1e-3
@@ -107,7 +104,25 @@ function startRandom(limit) {
     start(_.shuffle(getPairs(limit)), limit);
 }
 
+function getHighscoreList() {
+    $.get('/score/_all_docs', { include_docs: true }, showHighscoreList);
+
+    function showHighscoreList(data) {
+        var highscoreList = JST['app/templates/highscorelist.us']({
+            items: data.rows.map(getDoc)
+        });
+
+        $(highscoreList).appendTo('body');
+
+        function getDoc(row) {
+            return row.doc;
+        }
+    }
+}
+
 function init() {
+    getHighscoreList();
+
     var form = JST['app/templates/start.us']({
         x: 0, y: 0
     });
@@ -117,6 +132,7 @@ function init() {
     function handleSubmit() {
         $(this).hide();
         $('.score').remove();
+        $('.highscorelist').remove();
         startRandom(parseInt($('input#to').val(), 10));
         return false;
     }

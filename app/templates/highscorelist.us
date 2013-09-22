@@ -1,0 +1,21 @@
+<table class="highscorelist">
+    <tr>
+        <th>
+            nivå
+        </th>
+        <th>
+            poäng
+        </th>
+    </tr>
+    <% _.each(items, function(item) { %>
+    <tr>
+        <td>
+            <%= item.level %>
+        </td>
+        <td>
+            <%= item.score %>
+        </td>
+    </tr>
+    <% }); %>
+</table>
+
