@@ -50,14 +50,18 @@ function start(pairs, limit) {
                 var endMillis = new Date().getTime();
                 var elapsed = endMillis - startMillis;
 
-                $.post('/score',
-                    JSON.stringify({
+                $.ajax({
+                    type: 'POST',
+                    url: '/score',
+                    contentType: 'application/json',
+                    success: getHighscoreList,
+                    data: JSON.stringify({
                         score: elapsed,
                         level: limit,
                         name: '-',
                         timestamp: endMillis
-                    }),
-                    getHighscoreList);
+                    })
+                });
 
                 $('body').append(JST['app/templates/score.us']({
                     time: elapsed * 1e-3
