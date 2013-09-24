@@ -1,8 +1,11 @@
+@bg: darkolivegreen;
+@fg: white;
+
 body {
   font-size: 30px;
   font-family: sans-serif;
-  color: #ffffff;
-  background-color: darkgreen;
+  color: @fg;
+  background-color: @bg;
 }
 
 input {
@@ -10,14 +13,14 @@ input {
 }
 
 input[id="name"] {
-  color: #ffffff;
-  background-color: darkgreen;
+  color: @fg;
+  background-color: @bg;
   width: 224px;
 }
 
-input[id="to"] {
-  color: #ffffff;
-  background-color: darkgreen;
+input[type="number"] {
+  color: @fg;
+  background-color: @bg;
   width: 84px;
 }
 
@@ -30,7 +33,7 @@ table {
 }
 
 td {
-  color: darkgreen;
+  color: @bg;
   background-color: #90ee90;
   width: 56px;
   text-align: right;

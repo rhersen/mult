@@ -10,7 +10,7 @@ function getPairs(n) {
     return r;
 }
 
-function start(pairs, limit) {
+function start(pairs, limit, name) {
     var i = 0;
     var startMillis = new Date().getTime();
 
@@ -80,7 +80,7 @@ function start(pairs, limit) {
                 data: JSON.stringify({
                     score: elapsed,
                     level: limit,
-                    name: '-',
+                    name: name,
                     timestamp: endMillis
                 })
             });
@@ -109,8 +109,8 @@ function start(pairs, limit) {
     }
 }
 
-function startRandom(limit) {
-    start(_.shuffle(getPairs(limit)), limit);
+function startRandom(limit, name) {
+    start(_.shuffle(getPairs(limit)), limit, name);
 }
 
 function getHighscoreList() {
@@ -142,7 +142,7 @@ function init() {
         $(this).hide();
         $('.score').remove();
         $('.highscorelist').remove();
-        startRandom(parseInt($('input#to').val(), 10));
+        startRandom(parseInt($('input#to').val(), 10), $('input#name').val());
         return false;
     }
 }

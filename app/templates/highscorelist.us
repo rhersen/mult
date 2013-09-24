@@ -1,6 +1,9 @@
 <table class="highscorelist">
     <tr>
         <th>
+            namn
+        </th>
+        <th>
             nivå
         </th>
         <th>
@@ -9,6 +12,9 @@
     </tr>
     <% _.each(items, function(item) { %>
     <tr>
+        <td>
+            <%= item.name %>
+        </td>
         <td>
             <%= item.level %>
         </td>
