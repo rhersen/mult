@@ -47,30 +47,10 @@ function start(pairs, limit) {
             if (next()) {
                 updateQuestion();
             } else {
-                var endMillis = new Date().getTime();
-                var elapsed = endMillis - startMillis;
-
-                $.ajax({
-                    type: 'POST',
-                    url: '/score',
-                    contentType: 'application/json',
-                    success: getHighscoreList,
-                    data: JSON.stringify({
-                        score: elapsed,
-                        level: limit,
-                        name: '-',
-                        timestamp: endMillis
-                    })
-                });
-
-                $('body').append(JST['app/templates/score.us']({
-                    time: elapsed * 1e-3
-                }));
-
-                $('#game').remove();
-                $('form').show();
+                handleScore();
             }
         }
+
         function isCorrect(answer) {
             return answer === '' + (x() * y());
         }
@@ -86,6 +66,31 @@ function start(pairs, limit) {
 
         function next() {
             return ++i < pairs.length;
+        }
+
+        function handleScore() {
+            var endMillis = new Date().getTime();
+            var elapsed = endMillis - startMillis;
+
+            $.ajax({
+                type: 'POST',
+                url: '/score',
+                contentType: 'application/json',
+                success: getHighscoreList,
+                data: JSON.stringify({
+                    score: elapsed,
+                    level: limit,
+                    name: '-',
+                    timestamp: endMillis
+                })
+            });
+
+            $('body').append(JST['app/templates/score.us']({
+                time: elapsed * 1e-3
+            }));
+
+            $('#game').remove();
+            $('form').show();
         }
     }
 

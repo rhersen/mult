@@ -1,7 +1,17 @@
 <form>
-    <span class="from"> 2 </span>
-    –
+    <label for="name">
+        Jag heter
+    </label>
+    <input id="name">
+    <br>
+    och jag vill göra
+    <br>
+    multiplikationstabellen
+    <label for="to">
+        från 2 till
+    </label>
     <input type="number" autofocus="autofocus" id="to" value="9">
+    <br>
     <input type="submit" id="start" value="Start">
 </form>
 
