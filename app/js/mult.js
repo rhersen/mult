@@ -1,3 +1,5 @@
+/*global ui*/
+
 function getPairs(n) {
     var r = [];
 
@@ -15,18 +17,18 @@ function start(limit, name) {
     var i = 0;
     var startMillis = new Date().getTime();
 
-    createTable(limit);
-    bindAnswer(checkAnswer);
-    updateQuestion(pairs[i]);
+    ui.createTable(limit);
+    ui.bindAnswer(checkAnswer);
+    ui.updateQuestion(pairs[i]);
 
     function checkAnswer(answer) {
         if (isCorrect(answer)) {
             showAnswer();
             if (next()) {
-                updateQuestion(pairs[i]);
+                ui.updateQuestion(pairs[i]);
             } else {
                 var endMillis = new Date().getTime();
-                handleScore(endMillis, endMillis - startMillis, limit, name);
+                ui.handleScore(endMillis, endMillis - startMillis, limit, name);
             }
         }
 
@@ -35,8 +37,8 @@ function start(limit, name) {
         }
 
         function showAnswer() {
-            show(x(), y());
-            show(y(), x());
+            ui.show(x(), y());
+            ui.show(y(), x());
         }
 
         function next() {

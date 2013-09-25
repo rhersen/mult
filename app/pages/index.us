@@ -12,7 +12,7 @@
 <script type="text/javascript" src="js/app.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-        initUi(start);
+        ui.init(start);
     });
 </script>
 </body>
