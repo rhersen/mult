@@ -10,44 +10,23 @@ function getPairs(n) {
     return r;
 }
 
-function start(pairs, limit, name) {
+function start(limit, name) {
+    var pairs = _.shuffle(getPairs(limit));
     var i = 0;
     var startMillis = new Date().getTime();
 
-    createTable();
-    $("#answer").focus().keyup(function () {
-        checkAnswer($(this).val());
-    });
-    updateQuestion();
-
-    function createTable() {
-        $('body').append(JST['app/templates/table.us']({
-            x: 0, y: 0
-        }));
-
-        for (var i = 1; i <= limit; i++) {
-            var row = $('<tr></tr>').appendTo('table');
-
-            for (var j = 1; j <= limit; j++) {
-                $('<td>' + (i * j) + '</td>')
-                    .addClass('row' + i)
-                    .addClass('col' + j)
-                    .appendTo(row);
-            }
-        }
-
-        $('td').addClass('remaining');
-        $('td.row1').removeClass('remaining');
-        $('td.col1').removeClass('remaining');
-    }
+    createTable(limit);
+    bindAnswer(checkAnswer);
+    updateQuestion(pairs[i]);
 
     function checkAnswer(answer) {
         if (isCorrect(answer)) {
             showAnswer();
             if (next()) {
-                updateQuestion();
+                updateQuestion(pairs[i]);
             } else {
-                handleScore();
+                var endMillis = new Date().getTime();
+                handleScore(endMillis, endMillis - startMillis, limit, name);
             }
         }
 
@@ -58,46 +37,12 @@ function start(pairs, limit, name) {
         function showAnswer() {
             show(x(), y());
             show(y(), x());
-
-            function show(row, col) {
-                $('td.row' + row + '.col' + col).removeClass('remaining');
-            }
         }
 
         function next() {
             return ++i < pairs.length;
         }
 
-        function handleScore() {
-            var endMillis = new Date().getTime();
-            var elapsed = endMillis - startMillis;
-
-            $.ajax({
-                type: 'POST',
-                url: '/score',
-                contentType: 'application/json',
-                success: getHighscoreList,
-                data: JSON.stringify({
-                    score: elapsed,
-                    level: limit,
-                    name: name,
-                    timestamp: endMillis
-                })
-            });
-
-            $('body').append(JST['app/templates/score.us']({
-                time: elapsed * 1e-3
-            }));
-
-            $('#game').remove();
-            $('form').show();
-        }
-    }
-
-    function updateQuestion() {
-        $('.factor-x').text(x());
-        $('.factor-y').text(y());
-        $('#answer').val('');
     }
 
     function x() {
@@ -109,8 +54,60 @@ function start(pairs, limit, name) {
     }
 }
 
-function startRandom(limit, name) {
-    start(_.shuffle(getPairs(limit)), limit, name);
+function updateQuestion(pair) {
+    $('.factor-x').text(pair.x);
+    $('.factor-y').text(pair.y);
+    $('#answer').val('');
+}
+
+function show(row, col) {
+    $('td.row' + row + '.col' + col).removeClass('remaining');
+}
+
+function createTable(limit) {
+    $('body').append(JST['app/templates/table.us']({
+        x: 0, y: 0
+    }));
+
+    for (var i = 1; i <= limit; i++) {
+        var row = $('<tr></tr>').appendTo('table');
+
+        for (var j = 1; j <= limit; j++) {
+            $('<td>' + (i * j) + '</td>')
+                .addClass('row' + i)
+                .addClass('col' + j)
+                .appendTo(row);
+        }
+    }
+
+    $('td').addClass('remaining');
+    $('td.row1').removeClass('remaining');
+    $('td.col1').removeClass('remaining');
+}
+function handleScore(endMillis, elapsed, limit, name) {
+    $.ajax({
+        type: 'POST',
+        url: '/score',
+        contentType: 'application/json',
+        success: getHighscoreList,
+        data: JSON.stringify({
+            score: elapsed,
+            level: limit,
+            name: name,
+            timestamp: endMillis
+        })
+    });
+    $('body').append(JST['app/templates/score.us']({
+        time: elapsed * 1e-3
+    }));
+    $('#game').remove();
+    $('form').show();
+}
+
+function bindAnswer(checkAnswer) {
+    $("#answer").focus().keyup(function () {
+        checkAnswer($(this).val());
+    });
 }
 
 function getHighscoreList() {
@@ -129,20 +126,19 @@ function getHighscoreList() {
     }
 }
 
-function init() {
+function initUi(initGame) {
     getHighscoreList();
 
     var form = JST['app/templates/start.us']({
         x: 0, y: 0
     });
 
-    $(form).submit(handleSubmit).appendTo('body');
-
-    function handleSubmit() {
-        $(this).hide();
-        $('.score').remove();
-        $('.highscorelist').remove();
-        startRandom(parseInt($('input#to').val(), 10), $('input#name').val());
-        return false;
-    }
+    $(form).submit(function handleSubmit() {
+            $(this).hide();
+            $('.score').remove();
+            $('.highscorelist').remove();
+            initGame(parseInt($('input#to').val(), 10), $('input#name').val());
+            return false;
+        }
+    ).appendTo('body');
 }
