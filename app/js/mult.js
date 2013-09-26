@@ -1,5 +1,13 @@
 /*global ui*/
 
+var mult = {
+    pairs: [],
+    i: 0,
+    startMillis: 0,
+    limit: 9,
+    name: ''
+};
+
 function getPairs(n) {
     var r = [];
 
@@ -12,45 +20,47 @@ function getPairs(n) {
     return r;
 }
 
+function checkAnswer(answer) {
+    if (isCorrect(answer)) {
+        showAnswer();
+        if (next()) {
+            ui.updateQuestion(mult.pairs[mult.i]);
+        } else {
+            var endMillis = new Date().getTime();
+            ui.handleScore(endMillis, endMillis - mult.startMillis, mult.limit, mult.name);
+        }
+    }
+
+    function isCorrect(answer) {
+        return answer === '' + (x() * y());
+    }
+
+    function showAnswer() {
+        ui.show(x(), y());
+        ui.show(y(), x());
+    }
+
+    function next() {
+        return ++mult.i < mult.pairs.length;
+    }
+
+    function x() {
+        return mult.pairs[mult.i].x;
+    }
+
+    function y() {
+        return mult.pairs[mult.i].y;
+    }
+}
+
 function start(limit, name) {
-    var pairs = _.shuffle(getPairs(limit));
-    var i = 0;
-    var startMillis = new Date().getTime();
+    mult.limit = limit;
+    mult.name = name;
+    mult.pairs = _.shuffle(getPairs(limit));
+    mult.i = 0;
+    mult.startMillis = new Date().getTime();
 
     ui.createTable(limit);
     ui.bindAnswer(checkAnswer);
-    ui.updateQuestion(pairs[i]);
-
-    function checkAnswer(answer) {
-        if (isCorrect(answer)) {
-            showAnswer();
-            if (next()) {
-                ui.updateQuestion(pairs[i]);
-            } else {
-                var endMillis = new Date().getTime();
-                ui.handleScore(endMillis, endMillis - startMillis, limit, name);
-            }
-        }
-
-        function isCorrect(answer) {
-            return answer === '' + (x() * y());
-        }
-
-        function showAnswer() {
-            ui.show(x(), y());
-            ui.show(y(), x());
-        }
-
-        function next() {
-            return ++i < pairs.length;
-        }
-
-        function x() {
-            return pairs[i].x;
-        }
-
-        function y() {
-            return pairs[i].y;
-        }
-    }
+    ui.updateQuestion(mult.pairs[mult.i]);
 }
