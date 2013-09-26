@@ -5,7 +5,16 @@ var mult = {
     i: 0,
     startMillis: 0,
     limit: 9,
-    name: ''
+    name: '',
+    getPair: function () {
+        return this.pairs[this.i];
+    },
+    x: function () {
+        return this.getPair().x;
+    },
+    y: function () {
+        return this.getPair().y;
+    }
 };
 
 function getPairs(n) {
@@ -24,7 +33,7 @@ function checkAnswer(answer) {
     if (isCorrect(answer)) {
         showAnswer();
         if (next()) {
-            ui.updateQuestion(mult.pairs[mult.i]);
+            ui.updateQuestion(mult.getPair());
         } else {
             var endMillis = new Date().getTime();
             ui.handleScore(endMillis, endMillis - mult.startMillis, mult.limit, mult.name);
@@ -32,24 +41,16 @@ function checkAnswer(answer) {
     }
 
     function isCorrect(answer) {
-        return answer === '' + (x() * y());
+        return answer === '' + (mult.x() * mult.y());
     }
 
     function showAnswer() {
-        ui.show(x(), y());
-        ui.show(y(), x());
+        ui.show(mult.x(), mult.y());
+        ui.show(mult.y(), mult.x());
     }
 
     function next() {
         return ++mult.i < mult.pairs.length;
-    }
-
-    function x() {
-        return mult.pairs[mult.i].x;
-    }
-
-    function y() {
-        return mult.pairs[mult.i].y;
     }
 }
 
@@ -62,5 +63,5 @@ function start(limit, name) {
 
     ui.createTable(limit);
     ui.bindAnswer(checkAnswer);
-    ui.updateQuestion(mult.pairs[mult.i]);
+    ui.updateQuestion(mult.getPair());
 }
