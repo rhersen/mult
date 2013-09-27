@@ -16,12 +16,12 @@ describe("mult", function () {
             spyOn(ui, 'updateQuestion');
         });
 
-        it("should create table", function () {
+        it("creates table", function () {
             start(3, 'name');
             expect(ui.createTable).toHaveBeenCalledWith(3);
         });
 
-        it("should set start time", function () {
+        it("sets start time", function () {
             var before = new Date().getTime();
             start(3, 'name');
             var after = new Date().getTime();
@@ -39,6 +39,58 @@ describe("mult", function () {
                 {x: 4, y: 4}
             ]);
             expect(ui.updateQuestion).toHaveBeenCalledWith({x: 4, y: 4});
+        });
+    });
+
+    describe("checkAnswer", function () {
+        beforeEach(function () {
+            spyOn(ui, 'show');
+            spyOn(ui, 'handleScore');
+            spyOn(ui, 'updateQuestion');
+            spyOn(ui, 'createTable');
+        });
+
+        it("should show if answer is correct", function () {
+            start(3, 'name', [
+                {x: 2, y: 3}
+            ]);
+            checkAnswer('6');
+            expect(ui.show).toHaveBeenCalledWith(2, 3);
+            expect(ui.show).toHaveBeenCalledWith(3, 2);
+        });
+
+        it("should not show if answer is wrong", function () {
+            start(3, 'name', [
+                {x: 2, y: 2}
+            ]);
+            checkAnswer('5');
+            expect(ui.show).not.toHaveBeenCalled();
+        });
+
+        it("calls handleScore if answer is correct and there are no more questions", function () {
+            start(3, 'name', [
+                {x: 2, y: 2}
+            ]);
+            checkAnswer('4');
+            expect(ui.handleScore).toHaveBeenCalled();
+        });
+
+        it("should not call handleScore if there are more questions", function () {
+            start(3, 'name', [
+                {x: 2, y: 2},
+                {x: 3, y: 3}
+            ]);
+            checkAnswer('4');
+            expect(ui.handleScore).not.toHaveBeenCalled();
+        });
+
+        it("should update question after getting correct answer", function () {
+            start(3, 'name', [
+                {x: 2, y: 2},
+                {x: 3, y: 3}
+            ]);
+            checkAnswer('4');
+            expect(ui.updateQuestion).toHaveBeenCalledWith({x: 3, y: 3});
         });
     });
 });
