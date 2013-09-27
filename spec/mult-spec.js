@@ -21,14 +21,6 @@ describe("mult", function () {
             expect(ui.createTable).toHaveBeenCalledWith(3);
         });
 
-        it("should update question", function () {
-            start(3, 'name');
-            expect(mult.getPair().x).toBeLessThan(4);
-            expect(mult.getPair().y).toBeLessThan(4);
-            expect(mult.getPair().x).toBeGreaterThan(1);
-            expect(mult.getPair().y).toBeGreaterThan(1);
-        });
-
         it("should set start time", function () {
             var before = new Date().getTime();
             start(3, 'name');
@@ -43,8 +35,10 @@ describe("mult", function () {
         });
 
         it("shows the first question", function () {
-            start(3, 'name');
-            expect(ui.updateQuestion).toHaveBeenCalled();
+            start(3, 'name', [
+                {x: 4, y: 4}
+            ]);
+            expect(ui.updateQuestion).toHaveBeenCalledWith({x: 4, y: 4});
         });
     });
 });

@@ -54,10 +54,10 @@ function checkAnswer(answer) {
     }
 }
 
-function start(limit, name) {
+function start(limit, name, pairs) {
     mult.limit = limit;
     mult.name = name;
-    mult.pairs = _.shuffle(getPairs(limit));
+    mult.pairs = pairs || _.shuffle(getPairs(limit));
     mult.i = 0;
     mult.startMillis = new Date().getTime();
 
