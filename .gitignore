@@ -5,6 +5,5 @@
 
 /dist
 /generated
-/vendor
 
 .sass-cache
